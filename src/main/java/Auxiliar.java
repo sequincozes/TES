@@ -28,10 +28,15 @@ public class Auxiliar {
     }
 
     public static Instances selecionaFeatures(Instances amostras, int[] features) {
+        int totalFeatures = amostras.numAttributes();
+        System.out.println("Reduzindo de " + totalFeatures + " para " + features.length + " features.");
+
         Arrays.sort(features);
-        for (int i = amostras.numAttributes() - 1; i > 0; i--) {
-            if (amostras.numAttributes() <= features.length) {
+        for (int i = totalFeatures - 1; i > 0; i--) {
+            if (totalFeatures <= features.length) {
                 System.err.println("O número de features precisa ser maior que o filtro.");
+                System.out.println("Reduzindo de " + totalFeatures+ " para " + features.length + " features. Amostra: " + i);
+
                 System.exit(1);
                 return amostras;
             }

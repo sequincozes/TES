@@ -4,6 +4,7 @@ import weka.classifiers.trees.J48;
 import weka.core.Instance;
 import weka.core.Instances;
 
+// https://github.com/sequincozes/TES
 public class Principal {
 
     public static double normalClass = 0;
@@ -13,16 +14,20 @@ public class Principal {
         Instances datasetTreinamento = Auxiliar.lerDataset("ereno1ktrain.arff");
         Instances datasetTestes = Auxiliar.lerDataset("ereno1ktest.arff");
 
-        datasetTreinamento = Auxiliar.selecionaFeatures(datasetTreinamento, new int[]{1, 2, 3, 4, 5, 6});
-        datasetTestes = Auxiliar.selecionaFeatures(datasetTestes, new int[]{1, 2, 3, 4, 5, 6});
+//        new FeatureSelection().rankFeatures(datasetTreinamento, 10);
 
-        // Construção do modelo de classificação (treinamento)
+        int[] features = new int[]{1,17, 19};
+        datasetTreinamento = Auxiliar.selecionaFeatures(datasetTreinamento, features);
+        datasetTestes = Auxiliar.selecionaFeatures(datasetTestes, features);
+
+//        // Construção do modelo de classificação (treinamento)
         AbstractClassifier classificador = new IBk(); // nova instância de um classificador qualquer
         AbstractClassifier classificadorTreinado = Auxiliar.construir(datasetTreinamento, classificador);
-
-        // Testes e processamento de resultados
+//
+//        // Testes e processamento de resultados
         processaResultados(classificadorTreinado, datasetTestes);
     }
+
     public static void processaResultados(AbstractClassifier classificador, Instances teste) {
         // Resultados
         float VP = 0;
@@ -66,11 +71,11 @@ public class Principal {
         float totalNano = Float.valueOf(endNano - beginNano) / 1000; // converte para microssegundos
         System.out.println(" ### Tempo de Processamento");
         System.out.println("     - Tempo total de processamento: " + totalNano + " microssegundos");
-        System.out.println("     - Tempo de processamento por amostra: " + Float.valueOf(endNano - beginNano) / teste.size() + " microssegundos");
+        System.out.println("     - Tempo de processamento por amostra: " + totalNano / teste.size() + " microssegundos");
 
         System.out.println(" ### Desempenho na classificação");
         float acuracia = (VP + VN) * 100 / (VP + VN + FP + FN);
-        float recall = (VP * 100) / (VP + FN);
+        float recall = (VP * 100) / (FN + VP);
         float precision = (VP * 100) / (VP + FP);
         float f1score = 2 * (recall * precision) / (recall + precision);
         System.out.println("     - VP: " + VP + ", VN: " + VN + ", FP: " + FP + ", VN: " + FN);
@@ -81,4 +86,6 @@ public class Principal {
 
 
     }
+
+
 }
