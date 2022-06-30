@@ -23,8 +23,6 @@ public class Principal {
         // Testes e processamento de resultados
         processaResultados(classificadorTreinado, datasetTestes);
     }
-
-
     public static void processaResultados(AbstractClassifier classificador, Instances teste) {
         // Resultados
         float VP = 0;
