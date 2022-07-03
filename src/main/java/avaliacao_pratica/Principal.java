@@ -1,6 +1,7 @@
+package avaliacao_pratica;
+
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.lazy.IBk;
-import weka.classifiers.trees.J48;
 import weka.core.Instance;
 import weka.core.Instances;
 
@@ -14,7 +15,7 @@ public class Principal {
         Instances datasetTreinamento = Auxiliar.lerDataset("ereno1ktrain.arff");
         Instances datasetTestes = Auxiliar.lerDataset("ereno1ktest.arff");
 
-//        new FeatureSelection().rankFeatures(datasetTreinamento, 10);
+//        new avaliacao_pratica.FeatureSelection().rankFeatures(datasetTreinamento, 10);
 
         int[] features = new int[]{1,17, 19};
         datasetTreinamento = Auxiliar.selecionaFeatures(datasetTreinamento, features);

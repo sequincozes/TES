@@ -1,3 +1,5 @@
+package avaliacao_pratica;
+
 import weka.attributeSelection.*;
 import weka.core.Instances;
 
