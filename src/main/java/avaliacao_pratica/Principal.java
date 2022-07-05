@@ -23,7 +23,7 @@ public class Principal {
 //        datasetTestes = Auxiliar.selecionaFeatures(datasetTestes, features);
 
 //        // Construção do modelo de classificação (treinamento)
-        AbstractClassifier classificador = new J48(); // nova instância de um classificador qualquer
+        AbstractClassifier classificador = new IBk(); // nova instância de um classificador qualquer
         FeatureSelection.iwss(datasetTreinamento, datasetTestes, classificador);
 
 

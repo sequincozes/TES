@@ -6,12 +6,28 @@ import weka.core.Instances;
 
 public class FeatureSelection {
 
+    static double melhorF1Score = 13.606710433959961;
+    static int[] melhorConjunto = {1, 60};
+
     public static void iwss(Instances treino, Instances teste,
                             AbstractClassifier classificador) throws Exception {
         // Busca Sequencial
-        int[] selecao = new int[]{1}; // features para serem selecionadas
+        int[] selecao = new int[]{1,60}; // features para serem selecionadas
+
         double f1Score = testaConjunto(treino, teste, classificador, selecao);
-        System.out.println(f1Score);
+
+        System.out.println("Resultado: "+f1Score);
+        System.out.println("Melhor Resultado: "+melhorF1Score);
+
+        if (f1Score > melhorF1Score) {
+            melhorF1Score = f1Score;
+            melhorConjunto = selecao;
+            System.out.println("Temos um novo melhor resultado!");
+        } else {
+            System.out.println("Não houve melhoras!");
+        }
+
+
     }
 
     public void rankFeatures(Instances treino, int pontoCorte) throws Exception {
