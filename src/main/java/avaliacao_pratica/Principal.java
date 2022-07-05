@@ -24,10 +24,13 @@ public class Principal {
 
 //        // Construção do modelo de classificação (treinamento)
         AbstractClassifier classificador = new J48(); // nova instância de um classificador qualquer
-        AbstractClassifier classificadorTreinado = Auxiliar.construir(datasetTreinamento, classificador);
+        FeatureSelection.iwss(datasetTreinamento, datasetTestes, classificador);
+
+
+//        AbstractClassifier classificadorTreinado = Auxiliar.construir(datasetTreinamento, classificador);
 //
 //        // Testes e processamento de resultados
-        processaResultados(classificadorTreinado, datasetTestes);
+//        processaResultados(classificadorTreinado, datasetTestes);
     }
 
     public static void processaResultados(AbstractClassifier classificador, Instances teste) {

@@ -1,9 +1,18 @@
 package avaliacao_pratica;
 
 import weka.attributeSelection.*;
+import weka.classifiers.AbstractClassifier;
 import weka.core.Instances;
 
 public class FeatureSelection {
+
+    public static void iwss(Instances treino, Instances teste,
+                            AbstractClassifier classificador) throws Exception {
+        // Busca Sequencial
+        int[] selecao = new int[]{1}; // features para serem selecionadas
+        double f1Score = testaConjunto(treino, teste, classificador, selecao);
+        System.out.println(f1Score);
+    }
 
     public void rankFeatures(Instances treino, int pontoCorte) throws Exception {
         FeatureAvaliada[] allFeatures = new FeatureAvaliada[treino.numAttributes()];
@@ -18,7 +27,7 @@ public class FeatureSelection {
         int posRank = 0;
         for (int j = allFeatures.length; j > allFeatures.length - pontoCorte; j--) {
             filter[count++] = allFeatures[j - 1];
-            System.out.println(posRank++ + " - Feature " + filter[count-1].indiceFeature + ", peso: " + filter[count-1].valorFeature);
+            System.out.println(posRank++ + " - Feature " + filter[count - 1].indiceFeature + ", peso: " + filter[count - 1].valorFeature);
         }
     }
 
@@ -86,6 +95,25 @@ public class FeatureSelection {
         public int getIndiceFeature() {
             return indiceFeature;
         }
+    }
+
+    public static double testaConjunto(Instances treino, Instances teste,
+                                       AbstractClassifier classificador, int[] selecao) throws Exception {
+        // Seleção de features
+        Instances treinoReduzido =
+                Auxiliar.selecionaFeatures(treino, selecao);
+        Instances testReduzido =
+                Auxiliar.selecionaFeatures(teste, selecao);
+
+        // Treinar classificador
+        AbstractClassifier classificadorTreinado =
+                Auxiliar.construir(treinoReduzido, classificador);
+
+        // Testar classificador
+        double f1score = Auxiliar.classificarInstancias(
+                classificadorTreinado, testReduzido);
+
+        return f1score;
     }
 
 }
