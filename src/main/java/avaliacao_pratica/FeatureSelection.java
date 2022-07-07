@@ -3,31 +3,44 @@ package avaliacao_pratica;
 import weka.attributeSelection.*;
 import weka.classifiers.AbstractClassifier;
 import weka.core.Instances;
+import weka.core.pmml.Array;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FeatureSelection {
 
-    static double melhorF1Score = 13.606710433959961;
-    static int[] melhorConjunto = {1, 60};
+    static double melhorF1Score = 0;
+    static int[] melhorConjunto = {};
+
+    static ArrayList<String> progresso = new ArrayList<>();
 
     public static void iwss(Instances treino, Instances teste,
                             AbstractClassifier classificador) throws Exception {
+
         // Busca Sequencial
-        int[] selecao = new int[]{1,60}; // features para serem selecionadas
+        for (int i = 1; i < treino.numAttributes(); i++) {
 
-        double f1Score = testaConjunto(treino, teste, classificador, selecao);
+            int[] selecao = new int[melhorConjunto.length + 1];
 
-        System.out.println("Resultado: "+f1Score);
-        System.out.println("Melhor Resultado: "+melhorF1Score);
+            for (int j = 0; j < melhorConjunto.length; j++) {
+                selecao[j] = melhorConjunto[j];
+            }
+            selecao[melhorConjunto.length] = i;
+            System.out.println("Melhor Conjunto = " + Arrays.toString(melhorConjunto) + " => " + melhorF1Score);
 
-        if (f1Score > melhorF1Score) {
-            melhorF1Score = f1Score;
-            melhorConjunto = selecao;
-            System.out.println("Temos um novo melhor resultado!");
-        } else {
-            System.out.println("Não houve melhoras!");
+            double f1Score = testaConjunto(treino, teste, classificador, selecao);
+            System.out.println(Arrays.toString(selecao) + " => " + f1Score);
+            if (f1Score > melhorF1Score) {
+                melhorF1Score = f1Score;
+                melhorConjunto = selecao;
+                System.out.println("Novo melhor resultado: " + Arrays.toString(melhorConjunto) + " com " + melhorF1Score);
+            } else {
+                System.out.println("Não houve melhoras!");
+            }
+            progresso.add(i+";");
+            System.out.println("------------------");
         }
-
-
     }
 
     public void rankFeatures(Instances treino, int pontoCorte) throws Exception {
@@ -117,9 +130,9 @@ public class FeatureSelection {
                                        AbstractClassifier classificador, int[] selecao) throws Exception {
         // Seleção de features
         Instances treinoReduzido =
-                Auxiliar.selecionaFeatures(treino, selecao);
+                Auxiliar.selecionaFeatures(new Instances(treino), selecao);
         Instances testReduzido =
-                Auxiliar.selecionaFeatures(teste, selecao);
+                Auxiliar.selecionaFeatures(new Instances(teste), selecao);
 
         // Treinar classificador
         AbstractClassifier classificadorTreinado =

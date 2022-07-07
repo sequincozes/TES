@@ -33,7 +33,7 @@ public class Auxiliar {
     public static Instances selecionaFeatures(Instances amostras,
                                               int[] features) {
         int totalFeatures = amostras.numAttributes();
-        System.out.println("Reduzindo de " + totalFeatures + " para " + features.length + " features.");
+//        System.out.println("Reduzindo de " + totalFeatures + " para " + features.length + " features.");
 
         Arrays.sort(features);
         for (int i = totalFeatures - 1; i > 0; i--) {
@@ -55,7 +55,7 @@ public class Auxiliar {
             }
         }
         amostras.setClassIndex(amostras.numAttributes() - 1);
-        return new Instances(amostras);
+        return amostras;
     }
 
     public static double classificarInstancias(AbstractClassifier classificador, Instances teste) {
