@@ -15,9 +15,9 @@ public class PrincipalCSNetExtendido {
     public static double faultClass = 1;
 
     public static void main(String args[]) throws Exception {
-//        extrairResultadosCSNetEstendido();
-        gerarMatrizConfusao(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53});
-        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53});
+        extrairResultadosCSNetEstendido();
+//        gerarMatrizConfusao(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53});
+//        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53});
 
 //        Instances datasetTreinamento = Auxiliar.lerDataset("dataset-c2_20train.csv");
 //        Instances datasetTestes = Auxiliar.lerDataset("dataset-c2_80test.csv");
@@ -26,7 +26,7 @@ public class PrincipalCSNetExtendido {
         //        Construção do modelo de classificação (treinamento)
 //        AbstractClassifier classificador = new J48(); // nova instância de um classificador qualquer
 //        AbstractClassifier classificadorTreinado = Auxiliar.construir(datasetTreinamento, classificador);
-//
+
 //        FeatureSelection.iwss(datasetTreinamento, datasetTestes, classificadorTreinado);
 
     }
@@ -102,8 +102,6 @@ public class PrincipalCSNetExtendido {
 
     public static void extrairResultadosCSNetEstendido() throws Exception {
         System.out.println("Features" + ';' + "F1-Score" + ";" + "Precision" + ";" + "Recall" + ';' + "Acuracia" + ';' + "TotalNano" + ';' + "Time/sample");
-        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53});
-        geraCSV(new int[]{6, 7, 4, 14, 5, 3, 53, 2, 8, 1, 21, 30, 34, 25, 39, 44, 15, 16, 48, 43, 52, 13, 12, 45});
         geraCSV(new int[]{1, 2, 3, 4});
         geraCSV(new int[]{5, 6, 7, 8});
         geraCSV(new int[]{9, 10, 11, 12, 13, 14});
@@ -124,7 +122,10 @@ public class PrincipalCSNetExtendido {
         geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51, 25, 34, 43, 52, 53});
         geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51, 25, 34, 43, 52, 53, 13});
         geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51, 25, 34, 43, 52, 53, 14});
+        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51, 25, 34, 43, 52, 53, 13, 14});
         geraCSV(new int[]{1, 3, 4, 5, 6, 7, 53});
+        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53});
+        geraCSV(new int[]{6, 7, 4, 14, 5, 3, 53, 2, 8, 1, 21, 30, 34, 25, 39, 44, 15, 16, 48, 43, 52, 13, 12, 45});
     }
 
     public static void geraCSV(int[] features) throws Exception {
