@@ -8,22 +8,49 @@ import weka.classifiers.trees.RandomForest;
 import weka.core.Instance;
 import weka.core.Instances;
 
+import java.io.IOException;
+import java.util.Arrays;
+
 // https://github.com/sequincozes/TES
 public class Principal {
 
     public static double normalClass = 0; // isso aqui representa as classes com o valor N
-    public static double faultClass = 0;
+    public static double faultClass = 1;
 
     public static void main(String args[]) throws Exception {
+        System.out.println("Features" + ';' + "F1-Score" + ";" + "Precision" + ";" + "Recall" + ';' + "Acuracia" + ';' + "TotalNano" + ';' + "Time/sample");
+        geraCSV(new int[]{1, 2, 3, 4});
+        geraCSV(new int[]{5, 6, 7, 8});
+        geraCSV(new int[]{9, 10, 11, 12, 13, 14});
+        geraCSV(new int[]{15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47});
+        geraCSV(new int[]{16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51});
+        geraCSV(new int[]{25, 34, 43, 52, 53});
+        geraCSV(new int[]{1, 2, 3, 4,5, 6, 7, 8,9, 10, 11, 12, 13, 14});
+        geraCSV(new int[]{1, 2, 3, 4,5, 6, 7, 8,9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47});
+        geraCSV(new int[]{1, 2, 3, 4,5, 6, 7, 8,9, 10, 11, 12, 13, 14, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51});
+        geraCSV(new int[]{1, 2, 3, 4,5, 6, 7, 8,9, 10, 11, 12, 13, 14, 25, 34, 43, 52, 53});
+        geraCSV(new int[]{1, 2, 3, 4,5, 6, 7, 8,9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51});
+        geraCSV(new int[]{1, 2, 3, 4,5, 6, 7, 8,9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51, 25, 34, 43, 52, 53});
+        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47});
+        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51});
+        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 25, 34, 43, 52, 53});
+        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51});
+        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51, 25, 34, 43, 52, 53});
+        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51, 25, 34, 43, 52, 53, 13});
+        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51, 25, 34, 43, 52, 53, 14});
+    }
+
+    public static void anterior() throws Exception {
+
         // Leitura de datasets para a memória
         Instances datasetTreinamento = Auxiliar.lerDataset("dataset-c2_20train.csv");
         Instances datasetTestes = Auxiliar.lerDataset("dataset-c2_80test.csv");
 
 //        new avaliacao_pratica.FeatureSelection().rankFeatures(datasetTreinamento, 53);
 
-        int[] features = new int[]{1, 2, 3, 4,5, 6, 7, 8,9, 10, 11, 12, 13, 14, 25, 34, 43, 52, 53};
-        datasetTreinamento = Auxiliar.selecionaFeatures(datasetTreinamento, features);
-        datasetTestes = Auxiliar.selecionaFeatures(datasetTestes, features);
+//        int[] features = new int[]{1, 2, 3, 4,5, 6, 7, 8,9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47};
+//        datasetTreinamento = Auxiliar.selecionaFeatures(datasetTreinamento, features);
+//        datasetTestes = Auxiliar.selecionaFeatures(datasetTestes, features);
 
 //        // Construção do modelo de classificação (treinamento)
         AbstractClassifier classificador = new J48(); // nova instância de um classificador qualquer
@@ -96,5 +123,59 @@ public class Principal {
 
     }
 
+    public static void geraCSV(int[] features) throws Exception {
+        Instances datasetTreinamento = Auxiliar.lerDataset("dataset-c2_20train.csv");
+        Instances teste = Auxiliar.lerDataset("dataset-c2_80test.csv");
 
+        datasetTreinamento = Auxiliar.selecionaFeatures(datasetTreinamento, features);
+        teste = Auxiliar.selecionaFeatures(teste, features);
+
+        AbstractClassifier classificadorC = new J48(); // nova instância de um classificador qualquer
+        AbstractClassifier classificadorTreinado = Auxiliar.construir(datasetTreinamento, classificadorC);
+        // Resultados
+        float VP = 0; // quando o IDS diz que está acontecendo um ataque, e realmente está
+        float VN = 0; // quando o IDS diz que NÃO está acontecendo um ataque, e realmente NÃO está
+        float FP = 0; // quando o IDS diz que está acontecendo um ataque, PORÉM NÃO ESTÁ
+        float FN = 0; // quando o IDS diz que NÃO está acontecendo um ataque, PORÉM ESTÁ!
+        long beginNano = System.nanoTime();
+
+        int[][] confusionMatrix = new int[5][5];
+        for (int i = 0; i < teste.size(); i++) { //percorre cada uma das amostras de teste
+            try {
+                Instance testando = teste.instance(i);
+                double resultado = Auxiliar.testarInstancia(classificadorTreinado, testando);
+                double esperado = testando.classValue();
+                if (resultado == esperado) { // já sabemos que o resultado é verdadeiro
+                    if (resultado == normalClass || resultado == faultClass) {
+                        VN = VN + 1; // O IDS diz que NÃO está acontecendo um ataque, e realmente NÃO está
+                    } else {
+                        VP = VP + 1; // o IDS diz que está acontecendo um ataque, e realmente está
+                    }
+                } else { // sabemos que é um "falso"
+                    if (resultado == normalClass || resultado == faultClass) {
+                        FN = FN + 1; // o IDS diz que NÃO está acontecendo um ataque, PORÉM ESTÁ!
+                    } else {
+                        FP = FP + 1; // o IDS diz que está acontecendo um ataque, PORÉM NÃO ESTÁ
+                    }
+                }
+
+                // Confusion matrix:
+                confusionMatrix[(int) esperado][(int) resultado] = confusionMatrix[(int) esperado][(int) resultado] + 1;
+            } catch (ArrayIndexOutOfBoundsException a) {
+                System.err.println("Erro: " + a.getLocalizedMessage());
+                System.err.println("DICA: " + "Tem certeza que o número de classes está definido corretamente?");
+                System.exit(1);
+            } catch (Exception e) {
+                System.err.println("Erro: " + e.getLocalizedMessage());
+                System.exit(1);
+            }
+        }
+        long endNano = System.nanoTime();
+        float totalNano = Float.valueOf(endNano - beginNano) / 1000; // converte para microssegundos
+        float acuracia = (VP + VN) * 100 / (VP + VN + FP + FN); // quantos acertos o IDS teve
+        float recall = (VP * 100) / (VP + FN); // quantas vezes eu acertei dentre as vezes REALMENTE ESTAVA acontecendo um ataque
+        float precision = (VP * 100) / (VP + FP); // quantas vezes eu acertei dentre as vezes que eu DISSE que estava acontecendo
+        float f1score = 2 * (recall * precision) / (recall + precision);
+        System.out.println(Arrays.toString(features) + ';' + f1score/100 + ";" + precision/100 + ";" + recall/100 + ';' + acuracia/100 + ';' + totalNano + ';' + totalNano / teste.size());
+    }
 }
