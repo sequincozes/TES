@@ -3,6 +3,8 @@ package avaliacao_pratica;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.lazy.IBk;
 import weka.classifiers.trees.J48;
+import weka.classifiers.trees.REPTree;
+import weka.classifiers.trees.RandomForest;
 import weka.core.Instance;
 import weka.core.Instances;
 
@@ -10,27 +12,29 @@ import weka.core.Instances;
 public class Principal {
 
     public static double normalClass = 0; // isso aqui representa as classes com o valor N
+    public static double faultClass = 0;
 
     public static void main(String args[]) throws Exception {
         // Leitura de datasets para a memória
-        Instances datasetTreinamento = Auxiliar.lerDataset("ereno1ktrain.arff");
-        Instances datasetTestes = Auxiliar.lerDataset("ereno1ktest.arff");
+        Instances datasetTreinamento = Auxiliar.lerDataset("dataset-c2_20train.csv");
+        Instances datasetTestes = Auxiliar.lerDataset("dataset-c2_80test.csv");
 
-//        new avaliacao_pratica.FeatureSelection().rankFeatures(datasetTreinamento, 10);
+//        new avaliacao_pratica.FeatureSelection().rankFeatures(datasetTreinamento, 53);
 
-//        int[] features = new int[]{1,17, 19};
-//        datasetTreinamento = Auxiliar.selecionaFeatures(datasetTreinamento, features);
-//        datasetTestes = Auxiliar.selecionaFeatures(datasetTestes, features);
+        int[] features = new int[]{1, 2, 3, 4,5, 6, 7, 8,9, 10, 11, 12, 13, 14, 25, 34, 43, 52, 53};
+        datasetTreinamento = Auxiliar.selecionaFeatures(datasetTreinamento, features);
+        datasetTestes = Auxiliar.selecionaFeatures(datasetTestes, features);
 
 //        // Construção do modelo de classificação (treinamento)
-        AbstractClassifier classificador = new IBk(); // nova instância de um classificador qualquer
-        FeatureSelection.iwss(datasetTreinamento, datasetTestes, classificador);
+        AbstractClassifier classificador = new J48(); // nova instância de um classificador qualquer
+        AbstractClassifier classificadorTreinado = Auxiliar.construir(datasetTreinamento, classificador);
+
+//        FeatureSelection.iwss(datasetTreinamento, datasetTestes, classificador);
 
 
-//        AbstractClassifier classificadorTreinado = Auxiliar.construir(datasetTreinamento, classificador);
 //
 //        // Testes e processamento de resultados
-//        processaResultados(classificadorTreinado, datasetTestes);
+        processaResultados(classificadorTreinado, datasetTestes);
     }
 
     public static void processaResultados(AbstractClassifier classificador, Instances teste) {
@@ -41,20 +45,20 @@ public class Principal {
         float FN = 0; // quando o IDS diz que NÃO está acontecendo um ataque, PORÉM ESTÁ!
         long beginNano = System.nanoTime();
 
-        int[][] confusionMatrix = new int[2][2];
+        int[][] confusionMatrix = new int[5][5];
         for (int i = 0; i < teste.size(); i++) { //percorre cada uma das amostras de teste
             try {
                 Instance testando = teste.instance(i);
                 double resultado = Auxiliar.testarInstancia(classificador, testando);
                 double esperado = testando.classValue();
                 if (resultado == esperado) { // já sabemos que o resultado é verdadeiro
-                    if (resultado == normalClass) {
+                    if (resultado == normalClass || resultado == faultClass) {
                         VN = VN + 1; // O IDS diz que NÃO está acontecendo um ataque, e realmente NÃO está
                     } else {
                         VP = VP + 1; // o IDS diz que está acontecendo um ataque, e realmente está
                     }
                 } else { // sabemos que é um "falso"
-                    if (resultado == normalClass) {
+                    if (resultado == normalClass || resultado == faultClass) {
                         FN = FN + 1; // o IDS diz que NÃO está acontecendo um ataque, PORÉM ESTÁ!
                     } else {
                         FP = FP + 1; // o IDS diz que está acontecendo um ataque, PORÉM NÃO ESTÁ
