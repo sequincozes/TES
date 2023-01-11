@@ -3,7 +3,6 @@ package avaliacao_pratica;
 import weka.attributeSelection.*;
 import weka.classifiers.AbstractClassifier;
 import weka.core.Instances;
-import weka.core.pmml.Array;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +29,7 @@ public class FeatureSelection {
             System.out.println("Melhor Conjunto = " + Arrays.toString(melhorConjunto) + " => " + melhorF1Score);
 
             double f1Score = testaConjunto(treino, teste, classificador, selecao);
+
             System.out.println(Arrays.toString(selecao) + " => " + f1Score);
             if (f1Score > melhorF1Score) {
                 melhorF1Score = f1Score;
@@ -38,15 +38,18 @@ public class FeatureSelection {
             } else {
                 System.out.println("Não houve melhoras!");
             }
-            progresso.add(i+";");
+            progresso.add(i + ";");
             System.out.println("------------------");
         }
     }
 
     public void rankFeatures(Instances treino, int pontoCorte) throws Exception {
         FeatureAvaliada[] allFeatures = new FeatureAvaliada[treino.numAttributes()];
-        for (int i = 0; i < treino.numAttributes(); i++) {
+        for (int i = 0; i < treino.numAttributes() - 1; i++) {
+//            double peso = calcularaInfoGain(treino, i); // estamos usando o Gain Ratio, mas pode-se usar outros
+
             double peso = calcularaInfoGain(treino, i); // estamos usando o Gain Ratio, mas pode-se usar outros
+            System.out.println(i + "|" + peso);
             allFeatures[i] = new FeatureAvaliada(peso, i + 1);
         }
 
@@ -141,6 +144,8 @@ public class FeatureSelection {
         // Testar classificador
         double f1score = Auxiliar.classificarInstancias(
                 classificadorTreinado, testReduzido);
+
+
 
         return f1score;
     }

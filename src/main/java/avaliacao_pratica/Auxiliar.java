@@ -2,6 +2,7 @@ package avaliacao_pratica;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.trees.J48;
+import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 
