@@ -19,22 +19,70 @@ public class PrincipalCSNetExtendido {
 //        extrairMatrizCSNetEstendido();
 //        gerarMatrizConfusao(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53});
 //        geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53});
-        gerarIWSS();
+//        gerarIWSS();
 
+
+        int[] allFeatures = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
+        int[] iwssFeatures = new int[]{1, 3, 4, 5, 6, 7, 53};
+        for (int i = 1; i <= iwssFeatures.length; i++)
+            geraCSVRemoving(i, iwssFeatures);
+
+//        int[] isolateRemoval = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 14, 19, 25, 32, 33, 41, 43, 46, 47, 48, 53};
+//        geraCSV(allFeatures);
+
+    }
+
+    public static void geraCSVRemoving(int feature, int[] startingFeatures) throws Exception {
+
+        // Pré-seleção
+        Instances train = Auxiliar.lerDataset("dataset-c2_20train.csv");
+        train = Auxiliar.selecionaFeatures(train, startingFeatures);
+        Instances test = Auxiliar.lerDataset("dataset-c2_80test.csv");
+        test = Auxiliar.selecionaFeatures(test, startingFeatures);
+
+        // Prepara datasets
+        train = Auxiliar.removeFeature(train, feature);
+        test = Auxiliar.removeFeature(test, feature);
+
+        int numFeatures = train.numAttributes();
+        int[] selection = new int[numFeatures - 1];
+        int offset = 0;
+        for (int i = 0; i < numFeatures - 1; i++) {
+            if (feature == i + 1) {
+                offset = 1;
+            }
+            selection[i] = i + offset + 1;
+        }
+
+        trainAndTestConsideringFaults(new IBk(), selection, train, test, true);
 
     }
 
     public static void gerarIWSS() throws Exception {
-        int[] allFeatures = new int[]{
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
-//                5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47
-//                5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51
-//                5, 6, 7, 8, 9, 10, 11, 12, 13, 14,  25, 34, 43, 52, 53
-        };
+//        int[] allFeatures = new int[]{1, 2, 3, 4};
+//        int[] allFeatures = new int[]{15, 17, 18, 19, 20, 26, 27, 28, 29, 35, 36, 37, 38, 44, 45, 46, 47};
+//        int[] allFeatures = new int[]{16, 21, 22, 23, 24, 30, 31, 32, 33, 39, 40, 41, 42, 48, 49, 50, 51};
+//        int[] allFeatures = new int[]{25, 34, 43, 52, 53};
+//        int[] allFeatures = new int[]{1, 2, 3, 4, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
+//        int[] allFeatures = new int[]{1, 2, 3, 4, 15, 25, 35,45, 52, 53};
+//        int[] allFeatures = new int[]{1, 2, 3, 4, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
+//        int[] allFeatures = new int[]{9, 10, 11, 12, 13, 14};
+//        int[] allFeatures = new int[]{5, 6, 7, 8};
+//        int[] allFeatures = new int[]{5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
+//        int[] allFeatures = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
+//        int[] allFeatures = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 21, 25, 30, 34, 39, 43, 44, 45, 48, 52, 53};
+//        int[] allFeatures = new int[]{1, 3, 4, 5, 6, 7, 53};
 
-        iwss(allFeatures, true);
-        geraCSV(allFeatures);
+        // Intersection
+//        int[] allFeatures = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 12, 17, 19, 22, 23, 24, 53};
+
+
+//        iwss(allFeatures, true);
+//                int[] allFeatures = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 12, 17, 19, 22, 23, 24, 53};
+//        geraCSV(allFeatures);
 //        trainAndTestConsideringFaults(new IBk(), features, train, test);
+
+
     }
 
 
@@ -108,7 +156,7 @@ public class PrincipalCSNetExtendido {
         Instances treinoReduced = Auxiliar.selecionaFeatures(new Instances(train), melhorConjunto);
         Instances testReduced = Auxiliar.selecionaFeatures(new Instances(test), melhorConjunto);
         AbstractClassifier classificadorTreinado = Auxiliar.construir(treinoReduced, classificador);
-        trainAndTestConsideringFaults(classificador, melhorConjunto, treinoReduced, testReduced, true);
+        trainAndTestConsideringFaults(classificadorTreinado, melhorConjunto, treinoReduced, testReduced, true);
 
     }
 
@@ -208,6 +256,7 @@ public class PrincipalCSNetExtendido {
         gerarMatrizConfusao(new int[]{1, 3, 4, 5, 6, 7, 53});
     }
 
+
     public static void extrairResultadosCSNetEstendido() throws Exception {
         System.out.println("Features" + ';' + "F1-Score" + ";" + "Precision" + ";" + "Recall" + ';' + "Acuracia" + ';' + "TotalNano" + ';' + "Time/sample");
         geraCSV(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53});
@@ -246,6 +295,7 @@ public class PrincipalCSNetExtendido {
         trainAndTestConsideringFaults(new IBk(), features, train, test, true);
 
     }
+
 
     private static double trainAndTestConsideringFaults(AbstractClassifier classifier, int[] features, Instances datasetTreinamento, Instances teste, boolean printCSV) throws Exception {
 
